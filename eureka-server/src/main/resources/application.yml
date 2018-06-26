@@ -1,0 +1,34 @@
+server:
+  port: 9003
+
+spring:
+  application:
+    name: eureka-server
+  #系统监控
+  boot:
+    admin:
+      url: http://localhost:9002
+
+# 关闭安全管理
+management:
+  security:
+    enabled: false
+
+security:
+  basic:
+    enabled: true # 是否启用身份认证
+  user:
+    name: eureka # 定义用户名
+    password: eureka666 # 定义密码
+
+eureka:
+  client:
+    fetch-registry: false
+    register-with-eureka: false
+    serviceUrl:
+      defaultZone: http://${security.user.name}:${security.user.password}@${eureka.instance.hostname}:${server.port}/eureka/
+  instance:
+    hostname: localhost
+  server:  #配置属性，但由于 Eureka 自我保护模式以及心跳周期长的原因，经常会遇到 Eureka Server 不剔除已关停的节点的问题
+    enable-self-preservation: false
+    eviction-interval-timer-in-ms: 5000

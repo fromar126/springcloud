@@ -1,0 +1,76 @@
+server:
+  port: 9005
+
+spring:
+  application:
+    name: dn-zuul-server
+  profiles:
+    active: prod
+  #系统监控
+  boot:
+    admin:
+      url: http://localhost:9002
+  zipkin:
+    base-url: http://localhost:9001
+
+# 关闭安全管理
+management:
+  security:
+    enabled: false
+endpoints:
+  health:
+    sensitive: false
+# routes to serviceId,拦截请求到指定服务，我们使用eureka的自动发现，实现动态路由，
+zuul:
+  routes:
+    lang-detect: #随便定义，不重复就行
+      path: /lang-detect/**
+      serviceId: dn-langdetect-api
+    draft-center:
+      path: /draft-center/**
+      serviceId: dn-draft-center
+    ocr-api:
+      path: /ocr/**
+      serviceId: dn-ocr-api
+
+feign:
+  hystrix:
+    enabled: true
+
+hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 120000
+#hystrix.command.default.execution.timeout.enable=false
+
+#请求处理的超时时间
+ribbon.ReadTimeout: 120000
+#请求连接的超时时间
+ribbon.ConnectTimeout: 120000
+
+
+---
+spring:
+  profiles: dev
+eureka:
+  instance:
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 20
+  client:
+    serviceUrl:
+      defaultZone: http://discovery:4abrA$uCretH5th@10.5.110.242:8511/eureka/
+    registry-fetch-interval-seconds: 10
+---
+spring:
+  profiles: prod
+  cloud:
+    config:
+      retry:
+        initial-interval: 3000
+        multiplier: 1.5
+        max-interval: 20000
+        max-attempts: 6
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    serviceUrl:
+      defaultZone: http://discovery:4abrA$uCretH5th@192.168.65.100:8511/eureka/

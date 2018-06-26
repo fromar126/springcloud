@@ -1,0 +1,36 @@
+server:
+  port: 9001
+
+spring:
+  application:
+    name: sleuth-server
+  #系统监控
+  boot:
+    admin:
+      url: http://localhost:9002
+
+# 关闭安全管理
+management:
+  security:
+    enabled: false
+endpoints:
+  health:
+    sensitive: false
+
+#elasticsearch config
+#zipkin.storage.type=elasticsearch
+#zipkin.storage.elasticsearch.hosts=127.0.0.1:9200
+#zipkin.storage.elasticsearch.cluster=elasticsearch
+#zipkin.storage.elasticsearch.index=zipkin
+#zipkin.storage.elasticsearch.index-shards=5
+#zipkin.storage.elasticsearch.index-replicas=1
+
+#mysql config
+#zipkin.storage.type=mysql
+#spring.datasource.schema=classpath:/mysql.sql
+#spring.datasource.url=jdbc:mysql://${MYSQL_HOST:localhost}:3306/test
+#spring.datasource.username=root
+#spring.datasource.password=123
+#spring.datasource.initialize=true
+#spring.datasource.continueOnError=true
+#spring.sleuth.enabled=false

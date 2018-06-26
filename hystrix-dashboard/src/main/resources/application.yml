@@ -1,0 +1,13 @@
+server:
+  port: 9006
+spring:
+  application:
+    name: hystrix-dashboard
+    #系统监控
+  boot:
+    admin:
+      url: http://localhost:9002
+# 关闭安全管理
+management:
+  security:
+    enabled: false
